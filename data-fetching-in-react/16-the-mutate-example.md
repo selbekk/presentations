@@ -6,7 +6,7 @@ import useSWR from "swr";
 import * as api from "./api";
 
 const TodoList = () => {
-  const { data: todos, mutate } = useSWR("todos", api.getTodos);
+  const { data: todos, mutate } = useSWR<Todo[]>("/api/todos");
   const handleAdd = (title: string) => {
     api.addTodo(title);
     mutate([...todos, { id: "temp_id", title }]);

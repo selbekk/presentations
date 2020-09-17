@@ -1,6 +1,19 @@
 # Boilerplaten
 
-## Action Creatorene
+## APIet
+
+```tsx
+// api.ts
+export const getUser = await () => {
+  const response = await fetch('/api/user');
+  if (!response.ok) {
+    throw Error("User not found");
+  }
+  return response.json() as User;
+}
+```
+
+## Actions og action creators
 
 ```tsx
 enum UserActionsEnum {
@@ -24,19 +37,6 @@ const fetchUserError = (error: Error): UserActions => ({
 });
 ```
 
-## APIet
-
-```tsx
-// api.ts
-export const getUser = await () => {
-  const response = await fetch('/api/user');
-  if (!response.ok) {
-    throw Error("User not found");
-  }
-  return response.json() as User;
-}
-```
-
 ## Thunken
 
 ```tsx
@@ -53,7 +53,7 @@ export const fetchUser = (dispatch) => async () => {
 };
 ```
 
-## Reducern
+## Reduceren
 
 ```tsx
 type UserState = {
@@ -61,27 +61,70 @@ type UserState = {
   error?: Error;
   data?: User;
 };
-export const userReducer = (state: UserState, action: UserActions) {
-  if (action.type === UserActionsEnum.REQUEST) {
-    return {
+export const userReducer = (state: UserState, action: UserActions) => {
+  switch (action.type) {
+    case UserActionsEnum.REQUEST: {
+      return {
         ...state,
         isLoading: true,
         error: undefined,
       };
-  }
-  if (action.type === UserActionsEnum.RESPONSE) {
+    }
+    case UserActionsEnum.RESPONSE: {
       return {
         isLoading: false,
         error: undefined,
         data: action.data,
       };
     }
-  if (action.type === UserActionsEnum.ERROR) {
-    return {
-      isLoading: false,
-      error: action.error,
-      data: undefined,
-    };
+    case UserActionsEnum.ERROR: {
+      return {
+        isLoading: false,
+        error: action.error,
+        data: undefined,
+      };
+    }
+    default:
+      return state;
   }
-}
+};
+```
+
+## Selectoren
+
+```tsx
+import { createSelector } from "reselect";
+
+const userSelector = createSelector((state: State) => state.user);
+```
+
+## Bruken
+
+```tsx
+type ProfilePageProps = {
+  user: User | null;
+  isLoadingUser: boolean;
+  userError: Error | null;
+};
+const ProfilePage: React.FC<ProfilePageProps> = ({
+  user,
+  isLoadingUser,
+  userError,
+}) => {
+  if (!user && isLoadingUser) {
+    return <Spinner />;
+  }
+
+  if (userError) {
+    return <p>Oops, something crashed</p>;
+  }
+
+  return <h1>Hi there {user.name}</h1>;
+};
+};
+export default connect((state) => ({
+  user: userSelector(state).data,
+  isLoadingUser: userSelector(state).isLoading,
+  userError: userSelector(state).error,
+}))(ProfilePage);
 ```

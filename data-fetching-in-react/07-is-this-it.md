@@ -8,3 +8,4 @@
 ## Hva hvis…
 
 - global state !== global cache
+- vi kan frikoble server-cachen fra det vi tenker på som global state?

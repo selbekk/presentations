@@ -1,6 +1,6 @@
 # Datahenting i React
 
-Det er ikke bare-bare
+Det er vel et løst problem, eller…?
 
 ## Litt om meg
 
