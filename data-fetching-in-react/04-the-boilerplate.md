@@ -4,13 +4,13 @@
 
 ```tsx
 // api.ts
-export const getUser = await () => {
-  const response = await fetch('/api/user');
+export const getUser = async () => {
+  const response = await fetch("/api/user");
   if (!response.ok) {
     throw Error("User not found");
   }
   return response.json() as User;
-}
+};
 ```
 
 ## Actions og action creators

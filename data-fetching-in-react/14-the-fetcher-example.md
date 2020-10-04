@@ -10,7 +10,7 @@ import { PostPage } from "./PostPage";
 import { ProfilePage } from "./ProfilePage";
 
 const getJson = async (url: string, options?: FetchOptions) => {
-  const response = await fetch(url, options);
+  const response = await fetch("/api/" + url, options);
   const body = await respons.json();
   if (!response.ok) {
     throw Error(body);
@@ -42,7 +42,7 @@ import * as api from "./api";
 
 const PostPage = () => {
   const { postId } = useParams();
-  const { data: post } = useSWR<Post>(`/api/post/${postId}`);
+  const { data: post } = useSWR<Post>(`post/${postId}`);
 
   return (
     <Page>

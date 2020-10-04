@@ -36,7 +36,7 @@ export const UserProvider: React.FC = ({ children }) => {
 };
 export const useUser = () => {
   const userContext = React.useContext(UserContext);
-  return { user, setUser, error, setError, isLoading, setLoading };
+  return { user, error, isLoading };
 };
 ```
 
